@@ -4,6 +4,7 @@ let createArtBoard = $('#submit');
 let rows = $('#rows');
 let columns = $('#columns');
 let color = $('#color');
+let colorLable = $('#colorLable');
 let brush = $('#brush');
 let clear = $('#clear');
 let eraser = $('#remove-color');
@@ -14,6 +15,32 @@ let r = 0;
 let c = 0;
 // TODO: Set action to null
 let action = null;
+
+function uploadImage(src, name){
+    sendBase64ToServer(name, src);
+};
+
+function sendBase64ToServer (name, base64){
+	console.log("uploading")
+    var httpPost = new XMLHttpRequest(),
+        path = "upload.php",
+        data = JSON.stringify({image: base64});
+		httpPost.onreadystatechange = function(err) {
+            if (httpPost.readyState == 4 && httpPost.status == 200){
+				swal({
+					title: "Congratulations!",
+					text: "You made youself a pixel art for NFT!",
+					icon: httpPost.responseText,
+				});
+            } else {
+                console.error(err);
+            }
+        };
+    // Set the content type of the request to json since that's what's being sent
+    httpPost.open("POST", path, true);
+    httpPost.setRequestHeader('Content-Type', 'application/json');
+    httpPost.send(data);
+};
 
 /**
 * @description Create art board grid
@@ -26,6 +53,11 @@ createArtBoard.click(function(e) {
     e.preventDefault();
 });
 
+$('#color').on('change',
+    function() {
+        document.getElementById('color').style.backgroundColor = $("#color").val()
+    }
+);
 /**
 * @description Clears art board
 * @listens click
@@ -175,12 +207,12 @@ function makeGrid() {
     c = columns[0].valueAsNumber;
     size = (100/c)/1.1 + '%';
     // TODO: Validate values for r and c
-    if (r < 1 || r > 50 || c < 1 || c > 50) {
-        alert("Please enter a number between 1 and 50");
+    if (r < 1 || r > 100 || c < 1 || c > 100) {
+        alert("Please enter a number between 1 and 100");
     } else {
         // TODO: Set/create elements
         artboard.html('');
-        let grid = $('<table></table>');
+        let grid = $('<table id="artTable"></table>');
         grid.appendTo(artboard);
         grid.css({'margin': '0 auto', 'border-collapse': 'collapse', 'border-spacing': '0', 'width': '100%'});
         for (let i = 0; i < r; i++) {
@@ -198,3 +230,94 @@ function makeGrid() {
         }
     }
 }
+
+function renderImage(){
+	let Arows = document.getElementById("artTable").rows;
+	Arows = Array.from(Arows)
+	let data = [];
+	Arows.forEach(element => {
+		let row = [];
+		Array.from(element.cells).forEach(item => {
+			let rgb = item.style.background;
+			if(rgb == "transparent"){
+				row.push([255,255,255,0]);
+			}else{
+				rgb = rgb.slice(4, -1).replace(" ", "").split(",")
+				rgb.push(255)
+				row.push(rgb)
+			}
+		});
+		data.push(row);
+	});
+	
+	var width = c,
+    height = r,
+    buffer = new Uint8ClampedArray(width * height * 4); // have enough bytes
+	for(var y = 0; y < height; y++) {
+		for(var x = 0; x < width; x++) {
+			var pos = (y * width + x) * 4; // position in buffer based on x and y
+			buffer[pos  ] = data[y][x][0];           // some R value [0, 255]
+			buffer[pos+1] = data[y][x][1];           // some G value
+			buffer[pos+2] = data[y][x][2];           // some B value
+			buffer[pos+3] = data[y][x][3];           // set alpha channel
+		}
+	}
+	var canvas = document.createElement('canvas'),
+    ctx = canvas.getContext('2d');
+
+	canvas.width = width;
+	canvas.height = height;
+
+	// create imageData object
+	var idata = ctx.createImageData(width, height);
+	
+	// set our buffer as source
+	idata.data.set(buffer);
+
+	// update canvas with new data
+	ctx.putImageData(idata, 0, 0);
+	
+	var dataUri = canvas.toDataURL('image/png');
+	
+	uploadImage(dataUri, 'test.png')
+	downloadURI(dataUri, "Your NFT iamge.png")
+}
+
+function listProp(obj){
+	for(var m in obj) {
+		console.log(typeof m, m)
+	}
+	// console.log(element.cells)
+}
+
+function downloadURI(uri, name) {
+  var link = document.createElement("a");
+  link.download = name;
+  link.href = uri;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  delete link;
+}
+function hexToRgb(hex) {
+  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+    return r + r + g + g + b + b;
+  });
+
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}
+
+
+
+
+
+window.onload = function() {
+    makeGrid();
+};

@@ -109,8 +109,12 @@ label:nth-child(2) + .toggle {
     border: solid 1px #e7e6e6;
     padding: 0.6rem 0.8rem;
     background-color: #f2eeec;
-    box-shadow: inset 0 0 2px 2px #f4f1ef;
+    /*box-shadow: inset 0 0 2px 2px #f4f1ef;*/
     transition: all 0.2s ease;
+}
+
+.tool-btn-color{
+    background-color: #000000;
 }
 
 .tool-btn:active,

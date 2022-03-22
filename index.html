@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500|Noto+Sans|Oxygen+Mono" rel="stylesheet">
     <!-- Font awesome -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 </head>
 <body>
     <!-- Wrapper -->
@@ -20,27 +22,27 @@
 
         <!-- Workspace -->
         <main>
-
             <!-- Generate art board grid -->
             <aside>
                 <p>
                     <!-- <strong>Create your art board:</strong> -->
                     <form>
-                        <label for="rows">Enter height:</label>
-                        <input type="number" name="rows" id="rows" min="0" max="50" value="0">
-                        <label for="columns">Enter width:</label>
-                        <input type="number" name="columns" id="columns" min="0" max="50" value="0">
-                        <button id="submit" class="btn-submit">Create artboard</button>
+                        <label hidden for="rows">Enter height:</label>
+                        <input hidden type="number" name="rows" id="rows" min="0" max="100" value="50">
+                        <label hidden for="columns">Enter width:</label>
+                        <input hidden type="number" name="columns" id="columns" min="0" max="100" value="50">
+                        <button id="submit" class="btn-submit">Clean artboard</button>
                     </form>
                 </p>
             </aside>
-
             <!-- Tool box -->
             <aside class="toolbox">
                 <h4>Tools</h4>
                 <div>
-                    <button id="clear" class="tool-btn" title="Clear artboard"><i class="fab fa-delicious"></i></button>
-                    <label for="color" title="Pick color">
+                    <!--
+					<button id="clear" class="tool-btn" title="Clear artboard"><i class="fab fa-delicious"></i></button>
+					-->
+					<label id="colorLable" for="color" title="Pick color">
                     <input type="color" name="color" id="color" class="tool-btn-color">
                     </label>
                     <label for="brush" class="toggle" title="Brush">
@@ -74,7 +76,8 @@
     </main>
 
     <footer>
-        <h6>Made with <i class="fas fa-music"></i> by Renisha Christie A <p><a href="https://github.com/crisner/pixel-art-maker" target="_blank">View <i class="fas fa-code"></i> on <i class="fab fa-github"></i></a></p></h6>
+		<button onclick="renderImage()">Save Image</button>
+        <h6>Made by <i class="fas fa-music"></i> and Renisha Christie A with <a href="https://github.com/brianlihk" target="_blank">Brian Li</a><p><a href="https://github.com/crisner/pixel-art-maker" target="_blank">View <i class="fas fa-code"></i> on <i class="fab fa-github"></i></a></p></h6>
         <div>Paint bucket icon made by <a href="https://www.flaticon.com/authors/webalys-freebies" title="Webalys Freebies">Webalys Freebies</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 
     </footer>
