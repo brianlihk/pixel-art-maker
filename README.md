@@ -20,6 +20,7 @@ Go to [Pixel art maker](https://github.com/brianlihk/pixel-art-maker).
 
 ### Credit
 - Coded by [Renisha Christie](http://www.renishachristie.com)
+- Modified by [Brian Li](github.com/brianlihk/)
 - Fonts from [Font Awesome](https://fontawesome.com/icons?d=gallery)
 - Bucket icon made by [Webalys Freebies](https://www.flaticon.com/authors/webalys-freebies) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
 - Documentation created using [JSDoc](http://usejsdoc.org)
